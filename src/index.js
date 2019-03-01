@@ -1,23 +1,25 @@
-// import Vue from './Vue';
-
-// const app = new Vue({
-//   el: '#app',
-//   data: { name: { first: 'zhu' } },
-// });
-// // eslint-disable-next-line no-undef
-// window.app = app;
 import z from './Z';
 
 const App = {
   state: { count: 0 },
-  handleClick: function() {
-    let { count } = this.state;
-    console.log(count);
+  addCount: function() {
     this.state.count = this.state.count + 1;
   },
+  minusCount: function() {
+    this.state.count = this.state.count - 1;
+  },
   render: function() {
-    return z('div', `count: ${this.state.count}`, { onClick: this.handleClick.bind(this) } );
+    return z(
+      'div',
+      [
+        z('span', `count: ${this.state.count}`, {}),
+        z('button', '+', {onClick: this.addCount.bind(this)}),
+        z('button', '-', {onClick: this.minusCount.bind(this)}),
+      ],
+      {}
+    );
   }
 }
 
 z.mount('#app', App);
+z.mount('#app2', App);

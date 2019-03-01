@@ -8,12 +8,20 @@ function Vnode(tag, children, attrs) {
       attrs: attrs,
     }
   }
+  if (Array.isArray(children)) {
+    return {
+      tag: tag,
+      children: children,
+      attrs: attrs,
+    }
+  }
 }
 
 function fromComponent(component) {
   if (component && component.render) {
     const tree = Object.create(component);
-    tree.state = observe(component.state, tree); // clone
+    const clone = JSON.parse(JSON.stringify(component.state));
+    tree.state = observe(clone, tree);
     tree.tag = 'component';
     tree.children = tree.render();
     tree.children.id = Math.random();

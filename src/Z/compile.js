@@ -1,11 +1,16 @@
 export default function compile(VnodeTree) {
   let fragment = document.createDocumentFragment();
+  if (Array.isArray(VnodeTree)) {
+    VnodeTree.forEach(vnode => fragment.appendChild(compile(vnode)))
+    return fragment;
+  }
   if (VnodeTree.tag === 'component') {
     if (VnodeTree.children) {
       fragment = compile(VnodeTree.children);
     }
+    return fragment;
   }
-  if (VnodeTree.tag === 'div') {
+  if (['div', 'span', 'button'].includes(VnodeTree.tag)) {
     const container = document.createElement(VnodeTree.tag);
     if (VnodeTree.children) {
       const children = compile(VnodeTree.children);
@@ -23,6 +28,7 @@ export default function compile(VnodeTree) {
       container.id = VnodeTree.id;
     }
     fragment.appendChild(container);
+    return fragment;
   }
   return fragment;
 }
