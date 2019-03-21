@@ -11,11 +11,18 @@ function Vnode(tag, children, attrs, key) {
     }
   }
   if (Array.isArray(children)) {
+    const renderedChildren = children.map(item => {
+      if (item.render) {
+        return item.render();
+      } else {
+        return item;
+      }
+    });
     return {
       tag: tag,
       text: null,
       attrs: attrs,
-      children: children,
+      children: renderedChildren,
       key: key || children.map(item => item.tag).join('')
     }
   }
