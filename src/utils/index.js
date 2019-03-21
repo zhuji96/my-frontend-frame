@@ -1,5 +1,7 @@
 import clone from './clone';
+import moveInArray from './moveInArray';
 
-export default {
+export {
   clone,
+  moveInArray,
 }

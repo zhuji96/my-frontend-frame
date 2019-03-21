@@ -1,36 +1,38 @@
-import observe from './observe';
-import { clone } from '../utils';
+import watch from './watch';
 
-function Vnode(tag, children, attrs) {
+function Vnode(tag, children, attrs, key) {
   if (typeof children === 'string') {
     return {
       tag: tag,
       text: children,
       attrs: attrs,
+      children: null,
+      key: key || children
     }
   }
   if (Array.isArray(children)) {
     return {
       tag: tag,
-      children: children,
+      text: null,
       attrs: attrs,
+      children: children,
+      key: key || children.map(item => item.tag).join('')
     }
   }
 }
 
-function fromComponent(component) {
-  if (component && component.render) {
-    const tree = Object.create(component);
-    const stateClone = clone(component.state);
-    tree.state = observe(stateClone, tree);
-    tree.tag = 'component';
-    tree.children = tree.render();
-    tree.children.id = Math.random();
-    return tree;
+function createComponent(componentName, props) {
+  try {
+    const component = new componentName(props);
+    console.log(component)
+    watch(component);
+    return component;
   }
-  return null;
+  catch(err) {
+    console.log(err)
+  }
 }
 
-Vnode.fromComponent = fromComponent;
+Vnode.createComponent = createComponent;
 
 export default Vnode;

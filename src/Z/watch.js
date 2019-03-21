@@ -1,12 +1,15 @@
-/* eslint-disable no-param-reassign */
-import render from './render';
+import { update } from './render';
 
-export default function observe(data, instance) {
+export default function watch(component) {
+  component.state = observe(component.state, component);
+}
+
+function observe(data, component) {
   if (!data || typeof data !== 'object') {
     return data;
   }
   Object.keys(data).forEach((key) => {
-    data[key] = observe(data[key], instance);
+    data[key] = observe(data[key]);
   });
   const handler = {
     get(target, key, receiver) {
@@ -14,9 +17,9 @@ export default function observe(data, instance) {
     },
     set(target, key, value, receiver) {
       // const oldVal = target[key];
-      const newVal = observe(value, instance);
+      const newVal = observe(value);
       Reflect.set(target, key, newVal, receiver);
-      render(instance); // to update
+      update.call(component); // to update
       return true;
     },
   };

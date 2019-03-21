@@ -1,25 +1,31 @@
 import z from './Z';
 
-const App = {
-  state: { count: 0 },
-  addCount: function() {
+class App {
+  constructor(props) {
+    this.state = props;
+    this.addCount = this.addCount.bind(this);
+    this.minusCount = this.minusCount.bind(this);
+  }
+  addCount() {
     this.state.count = this.state.count + 1;
-  },
-  minusCount: function() {
+  }
+  minusCount() {
     this.state.count = this.state.count - 1;
-  },
-  render: function() {
+  }
+  render() {
     return z(
       'div',
       [
         z('span', `count: ${this.state.count}`, {}),
-        z('button', '+', {onClick: this.addCount.bind(this)}),
-        z('button', '-', {onClick: this.minusCount.bind(this)}),
+        z('button', '+', {onClick: this.addCount}),
+        z('button', '-', {onClick: this.minusCount}),
       ],
       {}
     );
   }
 }
 
-z.mount('#app', App);
-z.mount('#app2', App);
+z.mount('#app', z.createComponent(App, { count: 0 }));
+z.mount('#app2', z.createComponent(App, { count: 0 }));
+// z.mount('#app', App);
+// z.mount('#app2', App);

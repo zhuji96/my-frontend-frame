@@ -4,12 +4,12 @@ export default function compile(VnodeTree) {
     VnodeTree.forEach(vnode => fragment.appendChild(compile(vnode)))
     return fragment;
   }
-  if (VnodeTree.tag === 'component') {
-    if (VnodeTree.children) {
-      fragment = compile(VnodeTree.children);
-    }
-    return fragment;
-  }
+  // if (VnodeTree.tag === 'component') {
+  //   if (VnodeTree.children) {
+  //     fragment = compile(VnodeTree.children);
+  //   }
+  //   return fragment;
+  // }
   if (['div', 'span', 'button'].includes(VnodeTree.tag)) {
     const container = document.createElement(VnodeTree.tag);
     if (VnodeTree.children) {
@@ -23,9 +23,6 @@ export default function compile(VnodeTree) {
       if (VnodeTree.attrs.onClick) {
         container.addEventListener('click', VnodeTree.attrs.onClick);
       }
-    }
-    if (VnodeTree.id) {
-      container.id = VnodeTree.id;
     }
     fragment.appendChild(container);
     return fragment;

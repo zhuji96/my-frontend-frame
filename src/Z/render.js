@@ -1,13 +1,29 @@
-import compile from "./compile";
+import patch from "./patch";
+import diff from "./diff";
+import compile from './compile';
 
-function render(instance) {
-  console.log(instance);
-  const el = document.getElementById(''+instance.children.id);
-  const parent = el.parentNode;
-  const fragment = compile(instance.render());
-  fragment.firstChild.id = instance.children.id;
-  parent.insertBefore(fragment, el);
-  parent.removeChild(el);
+export default function mount(query, component) {
+  const el = document.querySelector(query);
+  if (el) {
+    let vnodeTree = component.render();
+    component.__vnode = vnodeTree;
+    component.__parent = el;
+    const fragment = compile(vnodeTree);
+    el.appendChild(fragment);
+  }
+  return null;
 }
 
-export default render;
+function update() {
+  const newTree = this.render();
+  const oldTree = this.__vnode;
+  const patches = diff(oldTree, newTree);
+  console.log(patches);
+  patch(this.__parent.childNodes[0], patches, 0);
+  this.__vnode = newTree;
+}
+
+export {
+  mount,
+  update
+};
