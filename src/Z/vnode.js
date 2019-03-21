@@ -1,4 +1,5 @@
 import observe from './observe';
+import { clone } from '../utils';
 
 function Vnode(tag, children, attrs) {
   if (typeof children === 'string') {
@@ -20,8 +21,8 @@ function Vnode(tag, children, attrs) {
 function fromComponent(component) {
   if (component && component.render) {
     const tree = Object.create(component);
-    const clone = JSON.parse(JSON.stringify(component.state));
-    tree.state = observe(clone, tree);
+    const stateClone = clone(component.state);
+    tree.state = observe(stateClone, tree);
     tree.tag = 'component';
     tree.children = tree.render();
     tree.children.id = Math.random();
