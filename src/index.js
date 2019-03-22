@@ -1,4 +1,5 @@
 import z from './Z';
+import css from './style.css';
 
 class App {
   constructor(props) {

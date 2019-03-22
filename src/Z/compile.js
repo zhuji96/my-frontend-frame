@@ -23,6 +23,9 @@ export default function compile(VnodeTree) {
       if (VnodeTree.attrs.onClick) {
         container.addEventListener('click', VnodeTree.attrs.onClick);
       }
+      if (VnodeTree.attrs.class) {
+        container.setAttribute('class', VnodeTree.attrs.class);
+      }
     }
     fragment.appendChild(container);
     return fragment;
